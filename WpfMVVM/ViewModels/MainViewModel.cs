@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using WpfMVVM.Services;
 
 namespace WpfMVVM.ViewModels
 {
@@ -23,11 +24,15 @@ namespace WpfMVVM.ViewModels
             get => _TextOfBox;
         }
 
-        public MainViewModel()
+        protected readonly ITestService _testService;
+
+        public MainViewModel(ITestService testService)
         {
             ButtonCommand = new RelayCommand(OnButtonCommand);
             CloseCommand = new RelayCommand<Window>(OnCloseCommand);
             TextBoxClickCommand = new RelayCommand<TextBox>(OnTextBoxClickCommand);
+
+            _testService = testService;
         }
 
         private void OnTextBoxClickCommand(TextBox obj)
@@ -46,7 +51,7 @@ namespace WpfMVVM.ViewModels
 
         private void OnButtonCommand()
         {
-            MessageBox.Show("您点击了按钮");
+            _testService.Test();
         }
     }
 }

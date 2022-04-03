@@ -21,11 +21,11 @@ namespace WpfMVVM.Views
     public partial class MainView : Window
     {
         protected readonly MainViewModel _VM;
-        public MainView()
+        public MainView(MainViewModel VM)
         {
             InitializeComponent();
 
-            DataContext = _VM = new MainViewModel();
+            DataContext = _VM = VM;
         }
     }
 }
