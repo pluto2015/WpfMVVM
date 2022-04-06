@@ -2,11 +2,13 @@
 using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using WpfMVVM.Models;
 using WpfMVVM.Services;
 
 namespace WpfMVVM.ViewModels
@@ -16,6 +18,7 @@ namespace WpfMVVM.ViewModels
         public RelayCommand ButtonCommand { set; get; }
         public RelayCommand<Window> CloseCommand { set; get; }
         public RelayCommand<TextBox> TextBoxClickCommand { set; get; }
+        public RelayCommand<TextBox> ListTextBoxClickCommand { set;get; }
 
         private string _TextOfBox = "文本框点击命令";
         public string TextOfBox
@@ -24,6 +27,8 @@ namespace WpfMVVM.ViewModels
             get => _TextOfBox;
         }
 
+        public ObservableCollection<ListModel> list { get; } = new ObservableCollection<ListModel>();
+
         protected readonly ITestService _testService;
 
         public MainViewModel(ITestService testService)
@@ -31,8 +36,24 @@ namespace WpfMVVM.ViewModels
             ButtonCommand = new RelayCommand(OnButtonCommand);
             CloseCommand = new RelayCommand<Window>(OnCloseCommand);
             TextBoxClickCommand = new RelayCommand<TextBox>(OnTextBoxClickCommand);
+            ListTextBoxClickCommand = new RelayCommand<TextBox>(OnListTextBoxClickCommand);
 
             _testService = testService;
+
+            for (int i = 0; i < 10; i++)
+            {
+                list.Add(new ListModel
+                {
+                    Col0 = i.ToString(),
+                    Col1 = i,
+                    Col2 = true
+                });
+            }
+        }
+
+        private void OnListTextBoxClickCommand(TextBox obj)
+        {
+            obj.Text = "123";
         }
 
         private void OnTextBoxClickCommand(TextBox obj)

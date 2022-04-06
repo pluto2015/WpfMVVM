@@ -4,7 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfMVVM.Views" 
-        xmlns:viewmodels="clr-namespace:WpfMVVM.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
+        xmlns:sys="clr-namespace:System.Configuration.Assemblies;assembly=System.Runtime"
+        xmlns:viewmodels="clr-namespace:WpfMVVM.ViewModels" 
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Title="MainView" Height="450" Width="800" x:Name="window_name">
     <Grid>
@@ -15,6 +18,42 @@
                 <MouseBinding Command="{Binding TextBoxClickCommand}" CommandParameter="{Binding ElementName=textbox_name}" MouseAction="LeftClick"></MouseBinding>
             </TextBox.InputBindings>
         </TextBox>
+        <DataGrid x:Name="data_grid" Margin="0,171,0,0" ItemsSource="{Binding list}" CanUserAddRows="False" AutoGenerateColumns="False" IsReadOnly="True" >
+            <DataGrid.Resources>
+                <DataTemplate x:Key="col0">
+                    <TextBox Text="{Binding Col0}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="PreviewMouseDown">
+                                <i:InvokeCommandAction Command="{Binding DataContext.ListTextBoxClickCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding Path=.,RelativeSource={RelativeSource AncestorType=TextBox}}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                </DataTemplate>
+                <DataTemplate x:Key="col1">
+                    <TextBox Text="{Binding Col1}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="PreviewMouseDown">
+                                <i:InvokeCommandAction Command="{Binding DataContext.ListTextBoxClickCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding Path=.,RelativeSource={RelativeSource AncestorType=TextBox}}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                </DataTemplate>
+                <DataTemplate x:Key="col2">
+                    <TextBox Text="{Binding Col2}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="PreviewMouseDown">
+                                <i:InvokeCommandAction Command="{Binding DataContext.ListTextBoxClickCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding Path=.,RelativeSource={RelativeSource AncestorType=TextBox}}"></i:InvokeCommandAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                </DataTemplate>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Col0" CellTemplate="{StaticResource col0}"></DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Col1" CellTemplate="{StaticResource col1}"></DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Col2" CellTemplate="{StaticResource col2}"></DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
 
     </Grid>
 </Window>
