@@ -6,10 +6,14 @@
         xmlns:local="clr-namespace:WpfMVVM.Views" 
         xmlns:sys="clr-namespace:System.Configuration.Assemblies;assembly=System.Runtime"
         xmlns:viewmodels="clr-namespace:WpfMVVM.ViewModels" 
+        xmlns:helpers="clr-namespace:WpfMVVM.Helpers"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Title="MainView" Height="450" Width="800" x:Name="window_name">
+    <Window.Resources>
+        <helpers:VisibilityBindingProxy x:Key="ColumnVisible" Data="{Binding ColumnVisible}"/>
+    </Window.Resources>
     <Grid>
         <Button Content="按钮命令" Command="{Binding ButtonCommand}" HorizontalAlignment="Left" Margin="109,51,0,0" VerticalAlignment="Top" Width="86" Height="30"/>
         <Button Content="关闭命令" Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=window_name}" HorizontalAlignment="Left" Margin="251,51,0,0" VerticalAlignment="Top" Width="97" Height="30"/>
@@ -51,7 +55,7 @@
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Col0" CellTemplate="{StaticResource col0}"></DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Col1" CellTemplate="{StaticResource col1}"></DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Col2" CellTemplate="{StaticResource col2}"></DataGridTemplateColumn>
+                <DataGridTemplateColumn Visibility="{Binding Data, Source={StaticResource ColumnVisible}}" Header="Col2" CellTemplate="{StaticResource col2}"></DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 

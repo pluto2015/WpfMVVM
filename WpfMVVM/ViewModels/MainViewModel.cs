@@ -27,6 +27,9 @@ namespace WpfMVVM.ViewModels
             get => _TextOfBox;
         }
 
+        private Visibility _ColumnVisible = Visibility.Visible;
+        public Visibility ColumnVisible { set => SetProperty(ref _ColumnVisible, value); get => _ColumnVisible; }
+
         public ObservableCollection<ListModel> list { get; } = new ObservableCollection<ListModel>();
 
         protected readonly ITestService _testService;
