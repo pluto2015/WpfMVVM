@@ -1,0 +1,45 @@
+﻿<Page x:Class="WpfMVVM.Views.DataGridPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfMVVM.Views" 
+      xmlns:helpers="clr-namespace:WpfMVVM.Helpers" 
+      xmlns:viewmodels="clr-namespace:WpfMVVM.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:DataGridPageViewModel}"
+      mc:Ignorable="d" Background="White"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="DataGridPage">
+    <Page.Resources>
+        <helpers:VisibilityBindingProxy x:Key="ColumnVisible" Data="{Binding ColumnVisible}"/>
+    </Page.Resources>
+    <ScrollViewer Margin="3">
+        <StackPanel>
+            <GroupBox Header="自动生成列">
+                <DataGrid Height="200" RowHeight="40" ColumnWidth="100" ItemsSource="{Binding AutoColList}" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn" AutoGenerateColumns="True" CanUserAddRows="False">
+                    <DataGrid.Resources>
+                        <Style TargetType="TextBox">
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                    </DataGrid.Resources>
+                </DataGrid>
+            </GroupBox>
+            <GroupBox Header="隐藏列">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Name="button" Content="隐藏" Width="80" Margin="3" Command="{Binding VisibleCommand}" CommandParameter="{Binding Path=., ElementName=button}"></Button>
+                    </StackPanel>
+                    <DataGrid Height="240" Grid.Row="1" RowHeight="40" ColumnWidth="100" ItemsSource="{Binding AutoColList}" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn" AutoGenerateColumns="False" CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding id}" Visibility="{Binding Data, Source={StaticResource ColumnVisible} }"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </GroupBox>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

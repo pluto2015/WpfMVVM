@@ -20,12 +20,48 @@ namespace WpfMVVM.Views
     /// </summary>
     public partial class MainView : Window
     {
-        protected readonly MainViewModel _VM;
-        public MainView(MainViewModel VM)
+        public MainView()
         {
             InitializeComponent();
 
-            DataContext = _VM = VM;
+            DataContext = new MainViewModel();
+        }
+
+        private void Frame_Navigating(object sender, System.Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+            try
+            {
+                var frame = sender as Frame;
+                var page = frame.DataContext as Page;
+                if (page != null)//释放资源
+                {
+                    var vm = page.DataContext as IDisposable;
+                    vm.Dispose();
+                    page.DataContext = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void Frame_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            try
+            {
+                var frame = sender as Frame;
+                if (frame.CanGoBack)
+                {
+                    frame.RemoveBackEntry();
+                    //主动回收，加快释放资源
+                    GC.Collect();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

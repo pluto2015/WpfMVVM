@@ -1,4 +1,5 @@
-﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
@@ -10,72 +11,52 @@ using System.Windows;
 using System.Windows.Controls;
 using WpfMVVM.Models;
 using WpfMVVM.Services;
+using WpfMVVM.Views;
 
 namespace WpfMVVM.ViewModels
 {
     public class MainViewModel:ObservableObject
     {
+        #region props
+        private Page _SubPage;
+        public Page SubPage { set => SetProperty(ref _SubPage, value); get => _SubPage; }
+        #endregion
+        #region commands
         public RelayCommand ButtonCommand { set; get; }
-        public RelayCommand<Window> CloseCommand { set; get; }
-        public RelayCommand<TextBox> TextBoxClickCommand { set; get; }
-        public RelayCommand<TextBox> ListTextBoxClickCommand { set;get; }
-
-        private string _TextOfBox = "文本框点击命令";
-        public string TextOfBox
-        {
-            set => SetProperty(ref _TextOfBox, value);
-            get => _TextOfBox;
-        }
-
-        private Visibility _ColumnVisible = Visibility.Visible;
-        public Visibility ColumnVisible { set => SetProperty(ref _ColumnVisible, value); get => _ColumnVisible; }
-
-        public ObservableCollection<ListModel> list { get; } = new ObservableCollection<ListModel>();
-
+        public RelayCommand TextBoxCommand { set; get; }
+        public RelayCommand DataGridCommand { set; get; }
+        #endregion
+        #region methods
         protected readonly ITestService _testService;
 
-        public MainViewModel(ITestService testService)
+        public MainViewModel()
+        {
+            InitCommands();
+
+            _testService = App.Current.Services.GetService<ITestService>();
+        }
+
+        private void InitCommands()
         {
             ButtonCommand = new RelayCommand(OnButtonCommand);
-            CloseCommand = new RelayCommand<Window>(OnCloseCommand);
-            TextBoxClickCommand = new RelayCommand<TextBox>(OnTextBoxClickCommand);
-            ListTextBoxClickCommand = new RelayCommand<TextBox>(OnListTextBoxClickCommand);
-
-            _testService = testService;
-
-            for (int i = 0; i < 10; i++)
-            {
-                list.Add(new ListModel
-                {
-                    Col0 = i.ToString(),
-                    Col1 = i,
-                    Col2 = true
-                });
-            }
+            TextBoxCommand = new RelayCommand(OnTextBoxCommand);
+            DataGridCommand = new RelayCommand(OnDataGridCommand);
         }
 
-        private void OnListTextBoxClickCommand(TextBox obj)
+        private void OnDataGridCommand()
         {
-            obj.Text = "123";
+            SubPage = new DataGridPage();
         }
 
-        private void OnTextBoxClickCommand(TextBox obj)
+        private void OnTextBoxCommand()
         {
-            obj.Text = "点击了文本框";
-        }
-
-        private void OnCloseCommand(Window obj)
-        {
-            if(MessageBox.Show("要关闭吗？","提示",MessageBoxButton.YesNo)!= MessageBoxResult.Yes)
-            {
-                return;
-            }
-            obj.Close();
+            SubPage = new TextBoxPage();
         }
 
         private void OnButtonCommand()
         {
-            _testService.Test();
+            SubPage = new ButtonPage();
         }
+        #endregion
     }
 }

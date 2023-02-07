@@ -51,9 +51,6 @@ namespace WpfMVVM
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            Services.GetRequiredService<MainView>()
-                .Show();
-
             base.OnStartup(e);
         }
     }
